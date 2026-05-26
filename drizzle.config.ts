@@ -8,5 +8,4 @@ export default {
 	dbCredentials: {
 		url: env.DATABASE_URL,
 	},
-	tablesFilter: ["t3-anho-dining_*"],
 } satisfies Config;
