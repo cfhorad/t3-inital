@@ -1,6 +1,6 @@
-# T3-anho-dining 🚀
+# T3-initial 🚀
 
-A cutting-edge, type-safe web application template built with a modern implementation of the **T3 Stack**, utilizing the latest Next.js 15, React 19, and Tailwind CSS v4 features. 
+A cutting-edge, type-safe web application template built with a modern implementation of the **T3 Stack**, utilizing the latest Next.js 16, React 19.2, and Tailwind CSS v4 features. 
 
 This repository serves as a boilerplate combining end-to-end type-safe APIs, robust authentication, relational database management, and a high-performance developer toolchain.
 
@@ -11,8 +11,8 @@ This repository serves as a boilerplate combining end-to-end type-safe APIs, rob
 The project relies on a state-of-the-art tech stack selected for maximum developer productivity, type safety, and runtime performance:
 
 ### 1. Core Framework & Runtime
-*   **Next.js 15 (App Router)**: Uses Next.js 15 with Server Components, Client Components, and the optimized React Compiler.
-*   **React 19 & React DOM 19**: Leverages modern React capabilities like server/client boundary features, hooks, and suspense.
+*   **Next.js 16 (App Router)**: Uses Next.js 16 with Server Components, Client Components, and the optimized React Compiler.
+*   **React 19.2 & React DOM 19.2**: Leverages modern React capabilities like server/client boundary features, hooks, and suspense.
 *   **TypeScript**: Strictly typed development environment across both frontend and backend.
 *   **pnpm v10**: Fast, disk-space-efficient package manager utilizing strict node_modules generation.
 
@@ -29,7 +29,7 @@ The project relies on a state-of-the-art tech stack selected for maximum develop
 *   **Postgres.js**: Blazing fast, full-featured PostgreSQL client for Node.js.
 
 ### 4. Authentication (Better Auth)
-*   **Better Auth (v1.3)**: A modern, modular, type-safe authentication library.
+*   **Better Auth (v1.6)**: A modern, modular, type-safe authentication library.
     *   **Drizzle Adapter**: Integrates directly with Drizzle ORM to store users, sessions, and accounts in PostgreSQL.
     *   **Providers**: Out-of-the-box support for Github OAuth and secure Email/Password authentication.
     *   **tRPC Integration**: Unified authentication middleware (`protectedProcedure`) checks active sessions and exposes session info type-safely.
@@ -78,10 +78,10 @@ Follow these steps to set up and run the application locally:
 
 ### 1. Clone & Install Dependencies
 
-Ensure you have **pnpm v10** installed.
+Ensure you have **pnpm v10** installed. Clone the repository and install packages:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/cfhorad/t3-inital.git
 cd t3-inital
 pnpm install
 ```
@@ -94,12 +94,13 @@ Create a `.env` file in the root of the project using the `.env.example` templat
 cp .env.example .env
 ```
 
-Ensure the variables are populated with your credentials:
+Open the `.env` file and populate it with your credentials:
+
 ```env
-# Database connection string
+# Database connection string (replace 't3-initial' if using a different DB name)
 DATABASE_URL="postgresql://postgres:password@localhost:5432/t3-initial"
 
-# Better Auth Secret (Generate using: openssl rand -base64 32)
+# Better Auth Secret (See below on how to generate)
 BETTER_AUTH_SECRET="your-32-byte-secret"
 
 # GitHub OAuth credentials for authentication (Optional but configured)
@@ -107,15 +108,44 @@ BETTER_AUTH_GITHUB_CLIENT_ID="your-github-client-id"
 BETTER_AUTH_GITHUB_CLIENT_SECRET="your-github-client-secret"
 ```
 
-### 3. Set Up the Database
+> [!TIP]
+> You can quickly generate a secure `BETTER_AUTH_SECRET` by running:
+> ```bash
+> openssl rand -base64 32
+> ```
+> Or by using the Better Auth CLI:
+> ```bash
+> npx better-auth secret
+> ```
 
-Make sure your PostgreSQL database is running, then execute migrations:
+### 3. Start & Initialize the Database
+
+Make sure your PostgreSQL server is running. 
+
+#### Option A: Using Docker (Recommended)
+If you have Docker or Podman installed, you can spin up the pre-configured local PostgreSQL container:
+```bash
+chmod +x start-database.sh
+./start-database.sh
+```
+*(This automatically pulls the Postgres image, reads the DB name from your `.env`, creates the database, and starts the container on port `5432`)*
+
+#### Option B: Using a Local Postgres Instance
+If you are using a local Postgres service (such as Postgres.app, DBngin, or homebrew), make sure you have **created the database** (e.g. `t3-initial`) first:
+```bash
+# Using CLI tools:
+createdb -h localhost -U postgres t3-initial
+```
+*(Alternatively, create the database manually via pgAdmin, DBeaver, or DBngin)*
+
+#### Apply Database Migrations
+Once the database is created and running, run the following commands to apply the schema:
 
 ```bash
-# Generate the migration files from schema
+# Generate the migration files from your schema
 pnpm db:generate
 
-# Apply the migrations to the database
+# Apply all migrations to the database
 pnpm db:migrate
 
 # (Optional) Open Drizzle Studio to inspect and edit database tables
